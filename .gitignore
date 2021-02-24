@@ -1,0 +1,6 @@
+*.exe
+*.sw[op]
+*.bak
+
+*.pyc
+a.out
