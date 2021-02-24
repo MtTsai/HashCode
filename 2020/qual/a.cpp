@@ -177,6 +177,7 @@ int main() {
                 credit = preSum[lib][r] -
                          allSc[r] + allSc[l] +
                          preSum[lib][r] - preSum[lib][l];
+                credit /= T[lib];
                 if (maxLib < 0 || credit > maxCredit) {
                     maxCredit = credit;
                     maxLib = lib;
