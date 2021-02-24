@@ -14,7 +14,7 @@ f = open(fileIn, "r")
 import sys
 sys.setrecursionlimit(10**6)
 
-M, T2, T3, T4 = [int(x) for x in f.readline().strip().split()]
+M, T2, T3, T4 = map(int, f.readline().strip().split())
 
 pizzas = {}
 vis = {}
