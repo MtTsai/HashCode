@@ -174,10 +174,11 @@ int main() {
                 if (l < 0) {
                     continue;
                 }
-                credit = preSum[lib][r] -
-                         allSc[r] + allSc[l] +
-                         preSum[lib][r] - preSum[lib][l];
-                credit /= T[lib];
+                // credit = preSum[lib][r] -
+                //          allSc[r] + allSc[l] +
+                //          preSum[lib][r] - preSum[lib][l];
+                // credit /= T[lib];
+                credit = preSum[lib][r] / T[lib];
                 if (maxLib < 0 || credit > maxCredit) {
                     maxCredit = credit;
                     maxLib = lib;
@@ -191,13 +192,18 @@ int main() {
             rD -= T[maxLib];
 
             vector<int> shipList;
+            int bookCnt = 0, maxBookCnt = rD * M[maxLib];
             for (int bid: libBList[maxLib]) {
                 if (!bShip.count(bid)) {
                     shipList.push_back(bid);
                     bShip.insert(bid);
+                    bookCnt++;
+                }
+                if (bookCnt == maxBookCnt) {
+                    break;
                 }
             }
-            ofList.push_back(make_pair(maxLib, libBList[maxLib]));
+            ofList.push_back(make_pair(maxLib, shipList));
         }
 #endif
 
