@@ -3,6 +3,6 @@
 *.bak
 
 *.pyc
-a.out
+*.out
 
 *.o
