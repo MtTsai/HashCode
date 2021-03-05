@@ -44,36 +44,56 @@ for fileName in inFiles:
         carPath = []
         allPathCount = collections.Counter()
         beginSt = set()
+        endSt = set()
+
+        carStCnt = 0
+        carStCntHist = []
         for _ in range(V):
             p = f.readline().split()[1:]
             carPath.append(p)
             beginSt.add(p[0])
+            endSt.add(p[-1])
+            carStCnt += len(p)
+            carStCntHist.append(len(p))
 
+        carStCntThr = sorted(carStCntHist)[int(V * 0.8)]
 
-        allPathCount = reduce(lambda x, y: x + collections.Counter(y), carPath, collections.Counter())
+        tgtPath = []
+        for i in range(V):
+            p = carPath[i]
+            if len(p) <= carStCntThr:
+                tgtPath.append(p)
+
+        allPathCount = reduce(lambda x, y: x + collections.Counter(y), tgtPath, collections.Counter())
+
+        iCarCnt = [0] * I
+        for iid in range(I):
+            for st in iStEndList[iid]:
+                iCarCnt[iid] += allPathCount[st]
 
     ofData = []
     for iid in range(I):
         if len(iStEndList[iid]) > 0:
             stTimeList = []
             base = 0
+            stCnt = len(iStEndList[iid])
             for st in iStEndList[iid]:
                 if allPathCount[st] > 0:
-                    # tmpTime = allPathCount[st] / allSt[st][2]
-                    tmpTime = allPathCount[st]
+                    tmpTime = allPathCount[st] * stCnt / iCarCnt[iid]
+                    tmpTime = math.ceil(tmpTime)
                     stTimeList.append([0 if st in beginSt else 1, [st, tmpTime]])
                     if base == 0 or base > tmpTime:
                         base = tmpTime
 
-            # stTimeList = [[st, math.ceil(tmpTime / base)] for st, tmpTime in stTimeList]
+            stTimeList = [stTime for _, stTime in sorted(stTimeList)]
+            # stTimeList = [[st, min(D / 2, math.ceil(tmpTime / base))] for st, tmpTime in stTimeList]
             if len(stTimeList) > 0:
-                stTimeList = [stTime for _, stTime in sorted(stTimeList)]
                 ofData.append([iid, stTimeList])
 
-    with open(fileName + ".out", "w") as f:
+    with open("_" + fileName + ".out", "w") as f:
         f.write(str(len(ofData)) + "\n")
         for iid, stTimeList in ofData:
             f.write(str(iid) + "\n")
             f.write(str(len(stTimeList)) + "\n")
             for st, stTime in stTimeList:
-                f.write(st + " " + str(stTime) + "\n")
+                f.write(st + " " + str(int(stTime)) + "\n")
